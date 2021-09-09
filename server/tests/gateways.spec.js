@@ -1,16 +1,29 @@
 const supertest = require('supertest');
 const app = require('../app');
+const { connectDB, closeDB, clearAndInitCollection } = require('./dbSetup');
 
 const request = supertest(app);
 
 const GATEWAY = {
-  _id: expect.any(String),
+  id: expect.any(String),
   name: expect.any(String),
   ipv4: expect.any(String),
   devices: expect.anything(),
 };
 
 describe('Gateways test suite', () => {
+  beforeAll(async () => {
+    await connectDB();
+  });
+
+  beforeEach(async () => {
+    await clearAndInitCollection('gateways');
+  });
+
+  afterAll(async () => {
+    await closeDB();
+  });
+
   it('fetches all the gateways', async () => {
     const { body: gateways } = await request.get('/gateways');
     expect(gateways).toMatchObject(Array(10).fill(GATEWAY));
@@ -44,7 +57,11 @@ describe('Gateways test suite', () => {
     const { body: gateways } = await request.get('/gateways');
     const [stubGateway] = gateways;
 
-    const { statusCode } = await request.delete(`/gateways/${stubGateway.id}`);
-    expect(statusCode).toMatchObject(404);
+    const { body: deletedGateway } = await request.delete(
+      `/gateways/${stubGateway.id}`,
+    );
+    const { statusCode } = await request.get(`/gateways/${stubGateway.id}`);
+    expect(statusCode).toEqual(404);
+    expect(deletedGateway).toMatchObject(stubGateway);
   });
 });
