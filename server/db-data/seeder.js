@@ -1,12 +1,12 @@
 const faker = require('faker');
 const mongoose = require('mongoose');
 
-const seedData = Array(10)
+const seedData = Array(3)
   .fill(null)
   .map(() => ({
     name: faker.internet.domainWord(),
     ipv4: faker.internet.ip(),
-    devices: Array(5)
+    devices: Array(2)
       .fill(null)
       .map(() => ({
         _id: mongoose.Types.ObjectId(),
@@ -31,6 +31,8 @@ const seed = async () => {
   }
 };
 
-seed();
+if (process.env.NODE_ENV === 'development') {
+  seed();
+}
 
 module.exports = seedData;

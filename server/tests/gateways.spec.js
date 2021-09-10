@@ -26,7 +26,7 @@ describe('Gateways test suite', () => {
 
   it('fetches all the gateways', async () => {
     const { body: gateways } = await request.get('/gateways');
-    expect(gateways).toMatchObject(Array(10).fill(GATEWAY));
+    expect(gateways).toMatchObject(Array(3).fill(GATEWAY));
   });
 
   it('fetches a gateway', async () => {

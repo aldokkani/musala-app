@@ -1,10 +1,16 @@
 const mongoose = require('mongoose');
+const { MongoMemoryServer } = require('mongodb-memory-server');
 const seedData = require('../db-data/seeder');
 
 const connectDB = async () => {
   // NOTE: before establishing a new connection close previous
   await mongoose.disconnect();
-  await mongoose.connect('mongodb://127.0.0.1/testdb');
+  const mongoServer = await MongoMemoryServer.create();
+  await mongoose.connect(mongoServer.getUri(), {
+    useNewUrlParser: true,
+    dbName: 'memoryTestDB',
+    useUnifiedTopology: true,
+  });
 };
 
 const closeDB = async () => {
