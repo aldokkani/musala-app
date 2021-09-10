@@ -37,6 +37,34 @@ describe('Gateways test suite', () => {
     expect(gateway).toMatchObject(stubGateway);
   });
 
+  it('creates a gateway', async () => {
+    const newGateway = {
+      name: 'test gateway',
+      ipv4: '250.250.250.250',
+      devices: [{ vendor: 'test vendor', status: 'Offline' }],
+    };
+
+    const { body: gateway } = await request.post('/gateways/').send(newGateway);
+
+    expect(gateway).toMatchObject(newGateway);
+  });
+
+  it("doesn't creates an invalid gateway", async () => {
+    const newGateway = {
+      name: 'test gateway',
+      ipv4: 'invalid ip address',
+      devices: [{ vendor: 'test vendor', status: 'invalid status' }],
+    };
+
+    const { body: errorMessage, statusCode } = await request
+      .post('/gateways/')
+      .send(newGateway);
+
+    expect(statusCode).toEqual(422);
+    expect(errorMessage).toEqual(expect.stringMatching(/`ipv4`/i));
+    expect(errorMessage).toEqual(expect.stringMatching(/`status`/i));
+  });
+
   it('updates a gateway', async () => {
     const gatewayName = 'test name';
 
