@@ -1,22 +1,5 @@
 const { Schema, model } = require('mongoose');
-
-const deviceSchema = new Schema(
-  {
-    vendor: String,
-    status: {
-      type: String,
-      enum: ['Online', 'Offline'],
-    },
-  },
-  {
-    timestamps: { updatedAt: false },
-    optimisticConcurrency: true,
-  },
-);
-
-deviceSchema.set('toJSON', {
-  virtuals: true,
-});
+const deviceSchema = require('./device');
 
 const gatewaySchema = new Schema(
   {

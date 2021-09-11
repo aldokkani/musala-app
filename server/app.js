@@ -5,6 +5,7 @@ const logger = require('morgan');
 
 const indexRouter = require('./routes/index');
 const gatewaysRouter = require('./routes/gateways');
+const devicesRouter = require('./routes/devices');
 
 const app = express();
 
@@ -16,5 +17,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/gateways', gatewaysRouter);
+gatewaysRouter.use('/:gatewayId/devices', devicesRouter);
 
 module.exports = app;
