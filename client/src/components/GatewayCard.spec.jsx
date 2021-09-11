@@ -10,12 +10,12 @@ export const stub = {
     {
       id: '613ca139b970065ac4bab3bd',
       vendor: 'Jones - Adams',
-      statues: 'Offline',
+      status: 'Offline',
     },
     {
       id: '613ca139b970065ac4bab3be',
       vendor: 'Stracke LLC',
-      statues: 'Online',
+      status: 'Online',
     },
   ],
 };
@@ -101,15 +101,13 @@ describe('GatewayCard test suite', () => {
     const vendorInput = screen.getByTestId('device-form-vendor');
     const statusInput = screen.getByTestId('device-form-status');
 
-    const newVendor = 'new name';
-    const newStatus = '250.250.250.250';
-
+    const newVendor = 'new vendor';
     userEvent.clear(vendorInput);
     userEvent.type(vendorInput, newVendor);
     expect(vendorInput).toHaveValue(newVendor);
 
-    userEvent.selectOptions(statusInput, newStatus);
-    expect(statusInput).toHaveValue(newStatus);
+    userEvent.click(statusInput);
+    expect(statusInput).toBeChecked();
 
     const saveBtn = screen.getByRole('button', { name: /save/i });
     userEvent.click(saveBtn);
@@ -117,7 +115,7 @@ describe('GatewayCard test suite', () => {
     expect(updateDevice).toBeCalledTimes(1);
     expect(updateDevice).toBeCalledWith({
       vendor: newVendor,
-      status: newStatus,
+      status: 'Online',
       id: stub.devices[0].id,
     });
   });

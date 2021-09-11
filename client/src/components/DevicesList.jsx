@@ -13,13 +13,19 @@ import ToggleOffIcon from '@material-ui/icons/ToggleOff';
 import { green } from '@material-ui/core/colors';
 import AlertDialog from './AlertDialog';
 
-const DeviceItem = ({ dev, setOpenAlert, setDevId }) => (
+const DeviceItem = ({
+  dev,
+  setOpenAlert,
+  setDevId,
+  openEditForm,
+  setSelectDevice,
+}) => (
   <ListItem>
     <ListItemIcon>
-      {dev.statues === 'Online' && (
+      {dev.status === 'Online' && (
         <ToggleOnIcon fontSize="large" style={{ color: green[500] }} />
       )}
-      {dev.statues === 'Offline' && (
+      {dev.status === 'Offline' && (
         <ToggleOffIcon fontSize="large" color="disabled" />
       )}
     </ListItemIcon>
@@ -28,7 +34,15 @@ const DeviceItem = ({ dev, setOpenAlert, setDevId }) => (
       secondary={'Vendor: ' + dev.vendor}
     />
     <ListItemSecondaryAction>
-      <IconButton edge="end" aria-label="edit" data-testid="edit-device">
+      <IconButton
+        edge="end"
+        aria-label="edit"
+        onClick={() => {
+          setSelectDevice(dev);
+          openEditForm();
+        }}
+        data-testid="edit-device"
+      >
         <EditIcon />
       </IconButton>
       <IconButton
@@ -46,7 +60,13 @@ const DeviceItem = ({ dev, setOpenAlert, setDevId }) => (
   </ListItem>
 );
 
-const DevicesList = ({ gatewayId, devices, deleteDevice }) => {
+const DevicesList = ({
+  gatewayId,
+  devices,
+  deleteDevice,
+  openEditForm,
+  setSelectDevice,
+}) => {
   const [openAlert, setOpenAlert] = useState(false);
   const [deviceId, setDevId] = useState(null);
 
@@ -66,6 +86,8 @@ const DevicesList = ({ gatewayId, devices, deleteDevice }) => {
           dev={dev}
           setOpenAlert={setOpenAlert}
           setDevId={setDevId}
+          openEditForm={openEditForm}
+          setSelectDevice={setSelectDevice}
         />
       ))}
       <AlertDialog

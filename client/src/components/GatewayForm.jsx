@@ -23,10 +23,6 @@ const GatewayForm = ({
     >
       <DialogTitle id="form-dialog-title">Update Gateway Info</DialogTitle>
       <DialogContent>
-        {/* <DialogContentText>
-          To subscribe to this website, please enter your email address here. We
-          will send updates occasionally.
-        </DialogContentText> */}
         <TextField
           inputProps={{ 'data-testid': 'gateway-form-name' }}
           id="outlined-basic"

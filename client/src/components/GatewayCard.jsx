@@ -10,9 +10,17 @@ import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
 import GatewayForm from './GatewayForm';
 import DevicesList from './DevicesList';
+import DeviceForm from './DeviceForm';
 
-const GatewayCard = ({ gateway, updateGateway, deleteDevice }) => {
+const GatewayCard = ({
+  gateway,
+  updateGateway,
+  updateDevice,
+  deleteDevice,
+}) => {
   const [openForm, setOpenForm] = useState(false);
+  const [openDeviceForm, setOpenDeviceForm] = useState(false);
+  const [selectDevice, setSelectDevice] = useState({});
 
   return (
     <Accordion defaultExpanded={false}>
@@ -40,6 +48,8 @@ const GatewayCard = ({ gateway, updateGateway, deleteDevice }) => {
               devices={gateway.devices}
               gatewayId={gateway.id}
               deleteDevice={deleteDevice}
+              openEditForm={() => setOpenDeviceForm(true)}
+              setSelectDevice={setSelectDevice}
             />
           </Grid>
         </Grid>
@@ -58,11 +68,18 @@ const GatewayCard = ({ gateway, updateGateway, deleteDevice }) => {
         </Button>
       </AccordionActions>
       <GatewayForm
-        key={openForm}
+        key={'gateway' + openForm}
         gateway={gateway}
         open={openForm}
         handleClose={setOpenForm}
         handleSave={updateGateway}
+      />
+      <DeviceForm
+        key={'device' + openDeviceForm}
+        device={selectDevice}
+        open={openDeviceForm}
+        handleClose={setOpenDeviceForm}
+        handleSave={updateDevice}
       />
     </Accordion>
   );
