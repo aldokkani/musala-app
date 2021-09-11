@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Accordion from '@material-ui/core/Accordion';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
@@ -9,7 +9,6 @@ import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
-import TextField from '@material-ui/core/TextField';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -21,24 +20,7 @@ import Grid from '@material-ui/core/Grid';
 import ToggleOnIcon from '@material-ui/icons/ToggleOn';
 import ToggleOffIcon from '@material-ui/icons/ToggleOff';
 import { green } from '@material-ui/core/colors';
-
-const stub = {
-  id: '613ca139b970065ac4bab3c5',
-  name: 'lawrence',
-  ipv4: '55.243.191.184',
-  devices: [
-    {
-      id: '613ca139b970065ac4bab3bd',
-      vendor: 'Jones - Adams',
-      statues: 'Offline',
-    },
-    {
-      id: '613ca139b970065ac4bab3be',
-      vendor: 'Stracke LLC',
-      statues: 'Online',
-    },
-  ],
-};
+import GatewayForm from './GatewayForm';
 
 const DevicesList = ({ devices }) => (
   <List
@@ -77,33 +59,11 @@ const DevicesList = ({ devices }) => (
   </List>
 );
 
-const GatewayEditForm = ({ gateway, className }) => (
-  <>
-    <Typography variant="h6">Edit Gateway:</Typography>
-    <Grid container spacing={2}>
-      <Grid item xs={12} md={12}>
-        <TextField
-          id="outlined-basic"
-          label="Name"
-          variant="outlined"
-          value={gateway.name}
-        />
-      </Grid>
-      <Grid item xs={12} md={12}>
-        <TextField
-          id="outlined-basic"
-          label="IPv4"
-          variant="outlined"
-          value={gateway.ipv4}
-        />
-      </Grid>
-    </Grid>
-  </>
-);
+const GatewayCard = ({ gateway, updateGateway }) => {
+  const [openForm, setOpenForm] = useState(false);
 
-const GatewayCard = ({ gateway = stub }) => {
   return (
-    <Accordion>
+    <Accordion defaultExpanded={false}>
       <AccordionSummary
         expandIcon={<ExpandMoreIcon data-testid="expand-icon" />}
         aria-controls="panel1c-content"
@@ -130,11 +90,24 @@ const GatewayCard = ({ gateway = stub }) => {
       </AccordionDetails>
       <Divider />
       <AccordionActions>
-        <Button size="small">Edit</Button>
+        <Button
+          data-testid="edit-gateway"
+          size="small"
+          onClick={() => setOpenForm(true)}
+        >
+          Edit
+        </Button>
         <Button size="small" color="secondary">
           Delete
         </Button>
       </AccordionActions>
+      <GatewayForm
+        key={openForm}
+        gateway={gateway}
+        open={openForm}
+        handleClose={setOpenForm}
+        handleSave={updateGateway}
+      />
     </Accordion>
   );
 };

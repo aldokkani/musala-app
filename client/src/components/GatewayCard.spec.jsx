@@ -2,9 +2,29 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import GatewayCard from './GatewayCard';
 
+export const stub = {
+  id: '613ca139b970065ac4bab3c5',
+  name: 'lawrence',
+  ipv4: '55.243.191.184',
+  devices: [
+    {
+      id: '613ca139b970065ac4bab3bd',
+      vendor: 'Jones - Adams',
+      statues: 'Offline',
+    },
+    {
+      id: '613ca139b970065ac4bab3be',
+      vendor: 'Stracke LLC',
+      statues: 'Online',
+    },
+  ],
+};
+
 describe('GatewayCard test suite', () => {
+  const updateGateway = jest.fn();
+
   beforeEach(() => {
-    render(<GatewayCard />);
+    render(<GatewayCard gateway={stub} updateGateway={updateGateway} />);
   });
 
   it('renders a gateway info', () => {
@@ -34,19 +54,28 @@ describe('GatewayCard test suite', () => {
 
     await screen.findByTestId('gateway-form');
 
-    const nameField = screen.getByLabelText(/name/i);
-    const ipField = screen.getByLabelText(/ipv4/i);
+    const nameInput = screen.getByTestId('gateway-form-name');
+    const ipInput = screen.getByTestId('gateway-form-ipv4');
 
-    userEvent.type(nameField, 'new name');
-    userEvent.type(ipField, '250.250.250.250');
+    const newName = 'new name';
+    const newIP = '250.250.250.250';
+
+    userEvent.clear(nameInput);
+    userEvent.type(nameInput, newName);
+    expect(nameInput).toHaveValue(newName);
+
+    userEvent.clear(ipInput);
+    userEvent.type(ipInput, newIP);
+    expect(ipInput).toHaveValue(newIP);
 
     const saveBtn = screen.getByRole('button', { name: /save/i });
     userEvent.click(saveBtn);
 
-    const gatewayName = screen.getByText(/Name:\s\w+/i);
-    const gatewayIP = screen.getByText(/IPv4:\s[\d.]+/i);
-
-    expect(gatewayName).toHaveText('ID: new name');
-    expect(gatewayIP).toHaveText('IPv4: 250.250.250.250');
+    expect(updateGateway).toBeCalledTimes(1);
+    expect(updateGateway).toBeCalledWith({
+      ipv4: newIP,
+      name: newName,
+      id: stub.id,
+    });
   });
 });
