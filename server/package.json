@@ -4,10 +4,13 @@
   "private": true,
   "scripts": {
     "start": "NODE_ENV=development node db-data/seeder.js && nodemon --inspect ./bin/www",
-    "test": "jest --watch"
+    "test": "jest --watch --detectOpenHandles"
   },
   "jest": {
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "setupFilesAfterEnv": [
+      "<rootDir>/tests/setupTests.js"
+    ]
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
