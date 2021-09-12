@@ -16,6 +16,7 @@ const GatewayCard = ({
   gateway,
   updateGateway,
   deleteGateway,
+  createDevice,
   updateDevice,
   deleteDevice,
 }) => {
@@ -82,10 +83,11 @@ const GatewayCard = ({
       />
       <DeviceForm
         key={'device' + openDeviceForm}
-        device={selectDevice}
+        device={{ ...selectDevice, gatewayId: gateway.id }}
         open={openDeviceForm}
         handleClose={setOpenDeviceForm}
-        handleSave={updateDevice}
+        handleUpdate={updateDevice}
+        handleCreate={createDevice}
       />
     </Accordion>
   );

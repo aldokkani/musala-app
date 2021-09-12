@@ -10,12 +10,18 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormGroup from '@material-ui/core/FormGroup';
 
 const DeviceForm = ({
-  device: { id, vendor, status } = {},
+  device: { id, vendor, status, gatewayId } = { vendor: '', status: 'Offline' },
   open,
-  handleSave,
+  handleCreate,
+  handleUpdate,
   handleClose,
 }) => {
-  const [deviceInfo, setDeviceInfo] = useState({ id, vendor, status });
+  const [deviceInfo, setDeviceInfo] = useState({
+    id,
+    vendor: vendor || '',
+    status: status || 'Offline',
+    gatewayId,
+  });
 
   return (
     <Dialog
@@ -24,7 +30,7 @@ const DeviceForm = ({
       onClose={() => handleClose(false)}
       aria-labelledby="form-dialog-title"
     >
-      <DialogTitle id="form-dialog-title">Update Device Info</DialogTitle>
+      <DialogTitle id="form-dialog-title">Device Info</DialogTitle>
       <DialogContent>
         <FormGroup>
           <FormControlLabel
@@ -62,7 +68,17 @@ const DeviceForm = ({
         <Button onClick={() => handleClose(false)} color="primary">
           Cancel
         </Button>
-        <Button onClick={() => handleSave(deviceInfo)} color="primary">
+        <Button
+          onClick={() => {
+            if (deviceInfo.id !== undefined) {
+              handleUpdate(deviceInfo);
+            } else {
+              handleCreate(deviceInfo);
+            }
+            handleClose(false);
+          }}
+          color="primary"
+        >
           Save
         </Button>
       </DialogActions>

@@ -14,6 +14,11 @@ import {
   updateGateway,
   createGateway,
 } from './services/gatewayService';
+import {
+  createDevice,
+  deleteDevice,
+  updateDevice,
+} from './services/deviceService';
 
 function App() {
   const [openForm, setOpenForm] = useState(false);
@@ -48,6 +53,24 @@ function App() {
     setGateways(updatedData);
   };
 
+  const handleDeviceUpdate = async ({ gatewayId, id, ...data }) => {
+    await updateDevice(gatewayId, id, data);
+    const updatedData = await fetchAllGateways();
+    setGateways(updatedData);
+  };
+
+  const handleDeviceDelete = async ({ gatewayId, id }) => {
+    await deleteDevice(gatewayId, id);
+    const updatedData = await fetchAllGateways();
+    setGateways(updatedData);
+  };
+
+  const handleDeviceCreate = async ({ gatewayId, ...data }) => {
+    await createDevice(gatewayId, data);
+    const updatedData = await fetchAllGateways();
+    setGateways(updatedData);
+  };
+
   return (
     <React.Fragment>
       <CssBaseline />
@@ -61,7 +84,6 @@ function App() {
               <IconButton
                 data-testid="add-gateway-btn"
                 color="primary"
-                aria-label="add to shopping cart"
                 onClick={() => setOpenForm(true)}
               >
                 <AddCircleIcon style={{ fontSize: 50 }} color="primary" />
@@ -78,8 +100,9 @@ function App() {
                   setOpenAlert(true);
                   setToBeDeleteGW(gatewayId);
                 }}
-                updateDevice={(d) => console.log(d)}
-                deleteDevice={(d) => console.log(d)}
+                createDevice={handleDeviceCreate}
+                updateDevice={handleDeviceUpdate}
+                deleteDevice={handleDeviceDelete}
               />
             ))}
           </Grid>

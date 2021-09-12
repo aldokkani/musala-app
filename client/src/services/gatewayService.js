@@ -1,4 +1,4 @@
-const SERVER_URL = 'http://localhost:8000';
+export const SERVER_URL = 'http://localhost:8000';
 
 export const fetchAllGateways = async () => {
   const response = await fetch(`${SERVER_URL}/gateways`, {

@@ -117,6 +117,7 @@ describe('GatewayCard test suite', () => {
       vendor: newVendor,
       status: 'Online',
       id: stub.devices[0].id,
+      gatewayId: stub.id,
     });
   });
 
@@ -135,7 +136,7 @@ describe('GatewayCard test suite', () => {
     expect(deleteDevice).toBeCalledTimes(1);
     expect(deleteDevice).toBeCalledWith({
       gatewayId: stub.id,
-      deviceId: stub.devices[0].id,
+      id: stub.devices[0].id,
     });
   });
 });

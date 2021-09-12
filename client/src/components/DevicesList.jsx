@@ -8,6 +8,7 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import IconButton from '@material-ui/core/IconButton';
+import AddCircleIcon from '@material-ui/icons/AddCircle';
 import ToggleOnIcon from '@material-ui/icons/ToggleOn';
 import ToggleOffIcon from '@material-ui/icons/ToggleOff';
 import { green } from '@material-ui/core/colors';
@@ -77,6 +78,13 @@ const DevicesList = ({
       subheader={
         <ListSubheader component="div" id="nested-list-subheader">
           Gateway Devices
+          <IconButton
+            data-testid="add-gateway-btn"
+            color="primary"
+            onClick={() => openEditForm(true)}
+          >
+            <AddCircleIcon fontSize="small" color="primary" />
+          </IconButton>
         </ListSubheader>
       }
     >
@@ -93,7 +101,10 @@ const DevicesList = ({
       <AlertDialog
         open={openAlert}
         setOpen={setOpenAlert}
-        handleDelete={() => deleteDevice({ deviceId, gatewayId })}
+        handleDelete={() => {
+          deleteDevice({ id: deviceId, gatewayId });
+          setOpenAlert(false);
+        }}
       />
     </List>
   );
