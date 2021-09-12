@@ -11,7 +11,7 @@ const seedData = Array(3)
       .map(() => ({
         _id: mongoose.Types.ObjectId(),
         vendor: faker.company.companyName(),
-        statues: ['Online', 'Offline'][Math.floor(Math.random() * 2)],
+        status: ['Online', 'Offline'][Math.floor(Math.random() * 2)],
       })),
   }));
 
