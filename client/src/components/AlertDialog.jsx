@@ -25,7 +25,10 @@ export default function AlertDialog({ open, setOpen, handleDelete }) {
         </Button>
         <Button
           data-testid="delete-btn"
-          onClick={handleDelete}
+          onClick={() => {
+            handleDelete();
+            setOpen(false);
+          }}
           color="secondary"
         >
           Delete

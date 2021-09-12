@@ -8,16 +8,45 @@ import IconButton from '@material-ui/core/IconButton';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import GatewayForm from './components/GatewayForm';
 import AlertDialog from './components/AlertDialog';
-import { fetchAllGateways } from './services/gatewayService';
+import {
+  deleteGateway,
+  fetchAllGateways,
+  updateGateway,
+  createGateway,
+} from './services/gatewayService';
 
 function App() {
   const [openForm, setOpenForm] = useState(false);
   const [openAlert, setOpenAlert] = useState(false);
   const [gateways, setGateways] = useState([]);
+  const [toBeDeleteGW, setToBeDeleteGW] = useState('');
+
+  const fetchData = async () => {
+    const data = await fetchAllGateways();
+    setGateways(data);
+  };
 
   useEffect(() => {
-    fetchAllGateways().then((data) => setGateways(data));
+    fetchData();
   }, []);
+
+  const handleGatewayUpdate = async (data) => {
+    await updateGateway(data.id, data);
+    const updatedData = await fetchAllGateways();
+    setGateways(updatedData);
+  };
+
+  const handleGatewayDelete = async () => {
+    await deleteGateway(toBeDeleteGW);
+    const updatedData = await fetchAllGateways();
+    setGateways(updatedData);
+  };
+
+  const handleGatewayCreate = async (data) => {
+    await createGateway(data);
+    const updatedData = await fetchAllGateways();
+    setGateways(updatedData);
+  };
 
   return (
     <React.Fragment>
@@ -44,8 +73,11 @@ function App() {
               <GatewayCard
                 key={g.id}
                 gateway={g}
-                updateGateway={(d) => console.log(d)}
-                deleteGateway={(gatewayId) => setOpenAlert(true)}
+                updateGateway={handleGatewayUpdate}
+                deleteGateway={(gatewayId) => {
+                  setOpenAlert(true);
+                  setToBeDeleteGW(gatewayId);
+                }}
                 updateDevice={(d) => console.log(d)}
                 deleteDevice={(d) => console.log(d)}
               />
@@ -55,12 +87,12 @@ function App() {
         <GatewayForm
           open={openForm}
           handleClose={setOpenForm}
-          handleSave={console.log}
+          handleSave={handleGatewayCreate}
         />
         <AlertDialog
           open={openAlert}
           setOpen={setOpenAlert}
-          handleDelete={() => console.log('delete')}
+          handleDelete={handleGatewayDelete}
         />
       </Container>
     </React.Fragment>

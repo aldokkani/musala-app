@@ -48,7 +48,13 @@ const GatewayForm = ({
         <Button onClick={() => handleClose(false)} color="primary">
           Cancel
         </Button>
-        <Button onClick={() => handleSave(gatewayInfo)} color="primary">
+        <Button
+          onClick={() => {
+            handleSave(gatewayInfo);
+            handleClose(false);
+          }}
+          color="primary"
+        >
           Save
         </Button>
       </DialogActions>

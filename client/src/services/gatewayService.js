@@ -7,6 +7,15 @@ export const fetchAllGateways = async () => {
   return await response.json();
 };
 
+export const createGateway = async (data) => {
+  const response = await fetch(`${SERVER_URL}/gateways`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  });
+  return await response.json();
+};
+
 export const updateGateway = async (id, data) => {
   const response = await fetch(`${SERVER_URL}/gateways/${id}`, {
     method: 'PATCH',
