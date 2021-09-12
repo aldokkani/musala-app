@@ -7,7 +7,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
 const GatewayForm = ({
-  gateway: { id, name, ipv4 } = {},
+  gateway: { id, name, ipv4 } = { name: '', ipv4: '' },
   open,
   handleSave,
   handleClose,
@@ -21,7 +21,7 @@ const GatewayForm = ({
       onClose={() => handleClose(false)}
       aria-labelledby="form-dialog-title"
     >
-      <DialogTitle id="form-dialog-title">Update Gateway Info</DialogTitle>
+      <DialogTitle id="form-dialog-title">Gateway Info</DialogTitle>
       <DialogContent>
         <TextField
           inputProps={{ 'data-testid': 'gateway-form-name' }}

@@ -15,6 +15,7 @@ import DeviceForm from './DeviceForm';
 const GatewayCard = ({
   gateway,
   updateGateway,
+  deleteGateway,
   updateDevice,
   deleteDevice,
 }) => {
@@ -63,7 +64,12 @@ const GatewayCard = ({
         >
           Edit
         </Button>
-        <Button size="small" color="secondary">
+        <Button
+          data-testid="delete-gateway"
+          size="small"
+          color="secondary"
+          onClick={() => deleteGateway(gateway.id)}
+        >
           Delete
         </Button>
       </AccordionActions>
