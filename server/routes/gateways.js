@@ -25,12 +25,15 @@ router.get('/:id', async (req, res) => {
 });
 
 router.patch('/:id', async (req, res) => {
-  res.json(
-    await Gateway.findByIdAndUpdate(req.params.id, req.body, {
+  try {
+    const gateway = await Gateway.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
       runValidators: true,
-    }),
-  );
+    });
+    res.json(gateway);
+  } catch (error) {
+    res.status(422).json(error.message);
+  }
 });
 
 router.delete('/:id', async (req, res) => {
