@@ -32,7 +32,9 @@ const DeviceItem = ({
     </ListItemIcon>
     <ListItemText
       primary={'ID: ' + dev.id}
-      secondary={'Vendor: ' + dev.vendor}
+      secondary={`Vendor: ${dev.vendor} | Created: ${new Date(
+        dev.createdAt,
+      )?.toDateString()}`}
     />
     <ListItemSecondaryAction>
       <IconButton

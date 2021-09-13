@@ -12,6 +12,7 @@ const mockData = Array(3)
         _id: mongoose.Types.ObjectId(),
         vendor: faker.company.companyName(),
         status: ['Online', 'Offline'][Math.floor(Math.random() * 2)],
+        createdAt: faker.date.past(),
       })),
   }));
 
