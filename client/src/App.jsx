@@ -6,6 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
+import Snackbar from '@material-ui/core/Snackbar';
 import GatewayForm from './components/GatewayForm';
 import AlertDialog from './components/AlertDialog';
 import {
@@ -22,6 +23,8 @@ import {
 
 function App() {
   const [openForm, setOpenForm] = useState(false);
+  const [openError, setOpenError] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
   const [openAlert, setOpenAlert] = useState(false);
   const [gateways, setGateways] = useState([]);
   const [toBeDeleteGW, setToBeDeleteGW] = useState('');
@@ -36,9 +39,14 @@ function App() {
   }, []);
 
   const handleGatewayUpdate = async (data) => {
-    await updateGateway(data.id, data);
-    const updatedData = await fetchAllGateways();
-    setGateways(updatedData);
+    try {
+      await updateGateway(data.id, data);
+      const updatedData = await fetchAllGateways();
+      setGateways(updatedData);
+    } catch (error) {
+      setErrorMsg(error.message);
+      setOpenError(true);
+    }
   };
 
   const handleGatewayDelete = async () => {
@@ -48,9 +56,14 @@ function App() {
   };
 
   const handleGatewayCreate = async (data) => {
-    await createGateway(data);
-    const updatedData = await fetchAllGateways();
-    setGateways(updatedData);
+    try {
+      await createGateway(data);
+      const updatedData = await fetchAllGateways();
+      setGateways(updatedData);
+    } catch (error) {
+      setErrorMsg(error.message);
+      setOpenError(true);
+    }
   };
 
   const handleDeviceUpdate = async ({ gatewayId, id, ...data }) => {
@@ -118,6 +131,13 @@ function App() {
           handleDelete={handleGatewayDelete}
         />
       </Container>
+      <Snackbar
+        open={openError}
+        autoHideDuration={6000}
+        onClose={() => setOpenError(false)}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        message={errorMsg}
+      ></Snackbar>
     </React.Fragment>
   );
 }

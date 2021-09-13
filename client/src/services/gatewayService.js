@@ -13,7 +13,11 @@ export const createGateway = async (data) => {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data),
   });
-  return await response.json();
+  if (response.ok) {
+    return await response.json();
+  } else {
+    throw Error(await response.text());
+  }
 };
 
 export const updateGateway = async (id, data) => {
@@ -22,7 +26,11 @@ export const updateGateway = async (id, data) => {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data),
   });
-  return await response.json();
+  if (response.ok) {
+    return await response.json();
+  } else {
+    throw Error(await response.text());
+  }
 };
 
 export const deleteGateway = async (id) => {
