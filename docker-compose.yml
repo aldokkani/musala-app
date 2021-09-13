@@ -4,7 +4,6 @@ services:
     build: client
     ports:
       - 3000:3000
-    stdin_open: true
     volumes:
       - ./client:/usr/src/app
       - /usr/src/app/node_modules
@@ -23,18 +22,56 @@ services:
       - ./server:/usr/src/app
       - /usr/src/app/node_modules
     depends_on:
-      - mongo
+      - mongo0
+      - mongo1
+      - mongo2
     ports:
       - 8000:8000
     environment:
-      DB_URI: mongodb://mongo:27017/musaladb
+      DB_URI: mongodb://mongo0:27017,mongo1:27017,mongo2:27017/musaladb?replicaSet=rs0
       CLIENT_URL: http://localhost:3000
 
-  mongo:
-    container_name: mongo
+  mongo0:
+    hostname: mongo0
+    container_name: mongolocal0
     restart: always
     image: mongo
     volumes:
-      - ./data:/data/db
+      - ./datadb:/data/db
     ports:
       - 27017:27017
+    entrypoint: ['/usr/bin/mongod', '--bind_ip_all', '--replSet', 'rs0']
+
+  mongo1:
+    hostname: mongo1
+    container_name: mongolocal1
+    restart: always
+    image: mongo
+    volumes:
+      - ./datadb1:/data/db
+    ports:
+      - 27018:27017
+    entrypoint: ['/usr/bin/mongod', '--bind_ip_all', '--replSet', 'rs0']
+
+  mongo2:
+    hostname: mongo2
+    container_name: mongolocal2
+    restart: always
+    image: mongo
+    volumes:
+      - ./datadb2:/data/db
+    ports:
+      - 27019:27017
+    entrypoint: ['/usr/bin/mongod', '--bind_ip_all', '--replSet', 'rs0']
+
+  replica-init:
+    container_name: replica-init
+    image: mongo
+    restart: on-failure
+    volumes:
+      - ./replica-init.sh:/scripts/replica-init.sh
+    entrypoint: ['/scripts/replica-init.sh']
+    depends_on:
+      - mongo0
+      - mongo1
+      - mongo2
