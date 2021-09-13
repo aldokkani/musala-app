@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const { MongoMemoryServer } = require('mongodb-memory-server');
-const seedData = require('../db-data/seeder');
+const { mockData } = require('../db-data/seeder');
 
 const connectDB = async () => {
   // NOTE: before establishing a new connection close previous
@@ -21,7 +21,7 @@ const clearAndInitCollection = async (colName) => {
   const collection = mongoose.connection.collection(colName);
   await collection.drop().catch(() => {});
 
-  await collection.insertMany(seedData);
+  await collection.insertMany(mockData);
 };
 
 module.exports = {

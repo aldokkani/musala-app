@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "NODE_ENV=development node db-data/seeder.js && nodemon --inspect ./bin/www",
+    "start": "nodemon --trace-warnings --inspect ./bin/www",
     "test": "jest --watch --detectOpenHandles"
   },
   "jest": {

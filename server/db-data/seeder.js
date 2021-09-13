@@ -1,7 +1,7 @@
 const faker = require('faker');
 const mongoose = require('mongoose');
 
-const seedData = Array(3)
+const mockData = Array(3)
   .fill(null)
   .map(() => ({
     name: faker.internet.domainWord(),
@@ -15,24 +15,21 @@ const seedData = Array(3)
       })),
   }));
 
-const seed = async () => {
+const runSeeder = async () => {
   try {
-    await mongoose.connect('mongodb://localhost:27017/musaladb');
-
     const collection = mongoose.connection.collection('gateways');
     await collection.drop().catch(() => {});
 
-    await collection.insertMany(seedData);
+    await collection.insertMany(mockData);
 
-    await mongoose.disconnect();
+    // await mongoose.disconnect();
     console.log('DB seeding is done.');
   } catch (error) {
     console.log(error.stack);
   }
 };
 
-if (process.env.NODE_ENV === 'development') {
-  seed();
-}
-
-module.exports = seedData;
+module.exports = {
+  runSeeder,
+  mockData,
+};
