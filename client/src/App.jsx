@@ -79,9 +79,14 @@ function App() {
   };
 
   const handleDeviceCreate = async ({ gatewayId, ...data }) => {
-    await createDevice(gatewayId, data);
-    const updatedData = await fetchAllGateways();
-    setGateways(updatedData);
+    try {
+      await createDevice(gatewayId, data);
+      const updatedData = await fetchAllGateways();
+      setGateways(updatedData);
+    } catch (error) {
+      setErrorMsg(error.message);
+      setOpenError(true);
+    }
   };
 
   return (

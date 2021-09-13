@@ -49,6 +49,22 @@ describe('Gateways test suite', () => {
     expect(gateway).toMatchObject(newGateway);
   });
 
+  it('throws error when creating a gateway with more than 10 devices', async () => {
+    const newGateway = {
+      name: 'test gateway',
+      ipv4: '250.250.250.250',
+      devices: Array(11).fill({ vendor: 'test vendor', status: 'Offline' }),
+    };
+
+    const { body: gateway } = await request.post('/gateways/').send(newGateway);
+
+    expect(gateway).toEqual(
+      expect.stringContaining(
+        "The gateway devices shouldn't exceed 10 devices",
+      ),
+    );
+  });
+
   it("doesn't creates an invalid gateway", async () => {
     const newGateway = {
       name: 'test gateway',

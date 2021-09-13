@@ -6,7 +6,11 @@ export const createDevice = async (gatewayId, data) => {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data),
   });
-  return await response.json();
+  if (response.ok) {
+    return await response.json();
+  } else {
+    throw Error(await response.text());
+  }
 };
 
 export const updateDevice = async (gatewayId, id, data) => {
